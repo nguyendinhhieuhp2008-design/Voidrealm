@@ -1,5 +1,7 @@
 package com.voidrealm.mod.entity;
 
+import com.voidrealm.mod.effect.Fx;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -61,6 +63,7 @@ public class PhaseStalker extends Monster {
             double tz = target.getZ() + Math.sin(angle) * 3.0D;
             if (this.randomTeleport(tx, target.getY(), tz, true)) {
                 this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                Fx.deathBurst(this, ParticleTypes.PORTAL);
             }
             this.blinkCooldown = 80 + this.random.nextInt(60);
         }
@@ -75,6 +78,7 @@ public class PhaseStalker extends Monster {
             double z = this.getZ() + (this.random.nextDouble() - 0.5D) * 12.0D;
             if (this.randomTeleport(x, y, z, true)) {
                 this.playSound(SoundEvents.ENDERMAN_TELEPORT, 1.0F, 1.0F);
+                Fx.deathBurst(this, ParticleTypes.PORTAL);
             }
         }
         return result;
@@ -93,5 +97,19 @@ public class PhaseStalker extends Monster {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.ENDERMAN_DEATH;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide) {
+            Fx.aura(this, ParticleTypes.PORTAL, 2);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        Fx.deathBurst(this, ParticleTypes.PORTAL);
     }
 }

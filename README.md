@@ -12,6 +12,7 @@ texture 16x16, ít hạt (particle), có file cấu hình `config/voidrealm-comm
 - **6 quái vật**: Kẻ Lang Thang Hư Không, Cung Thủ Dị Giới, Kẻ Rình Rập Hư Ảnh (dịch chuyển), Lợn Rừng Hư Không, Hộ Pháp Dị Giới, và boss **Chúa Tể Hư Không** (thanh máu, xung hư không, gọi đồng bọn).
 - **3 công trình**: Tháp Bia Hư Không (có spawner + rương trên đỉnh), Phế Tích Dị Giới (bàn thờ + spawner), Thành Trì Hư Không (boss, 2 Hộ Pháp, 4 tháp góc, rương loot).
 - **Khối**: quặng (thường + deepslate), Đá/Gạch Hư Không, Khối Thép, Đèn Khe Nứt. Mọi món có công thức chế tạo.
+- **Đồ họa & hiệu ứng**: texture quái vẽ chi tiết kèm lớp phát sáng (mắt, rune, vết nứt dung nham) bằng RenderType vanilla; khối động (quặng lấp lánh, đèn xoáy, rune thép nhấp nháy, đá hư không đầy sao); vũ khí có ánh phù phép, vệt hạt khi dịch chuyển/đánh trúng; boss có vòng hạt xoáy, sóng xung và hiệu ứng chết; giáp có hạt khi mặc đủ bộ. Tất cả hạt giảm được bằng `particlePercent`.
 - Ngôn ngữ: Tiếng Việt (vi_vn) và English.
 
 ## Lấy file .jar (không cần cài gì trên điện thoại)
@@ -29,5 +30,5 @@ Hoặc trên máy tính có JDK 21: `./gradlew build` → jar nằm ở `build/l
 4. Tăng hiệu năng: giảm `particlePercent` trong `config/voidrealm-common.toml` (mặc định 50), giảm Simulation/Render Distance.
 
 ## Tùy chỉnh
-- `tools/gen_textures.py`, `tools/gen_data.py`, `tools/gen_structures.py` sinh lại texture, model/lang/công thức/loot/worldgen và công trình (.nbt).
+- `tools/gen_art.py` (đồ họa nâng cấp, chạy cái này để sinh lại toàn bộ texture), `tools/gen_textures.py`, `tools/gen_data.py`, `tools/gen_structures.py` sinh lại texture, model/lang/công thức/loot/worldgen và công trình (.nbt).
 - Bản mod này viết trên API NeoForge 21.1.x; môi trường tạo ra nó không biên dịch được, nên nếu build báo lỗi hãy gửi nội dung lỗi để sửa.

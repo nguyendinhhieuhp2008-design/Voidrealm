@@ -15,6 +15,7 @@ public class RiftArcherRenderer extends HumanoidMobRenderer<RiftArcher, Skeleton
 
     public RiftArcherRenderer(EntityRendererProvider.Context context) {
         super(context, new SkeletonModel<>(context.bakeLayer(ModelLayers.SKELETON)), 0.5F);
+        this.addLayer(new GlowLayer<RiftArcher, SkeletonModel<RiftArcher>>(this, "rift_archer"));
     }
 
     @Override

@@ -16,6 +16,7 @@ public class VoidBoarRenderer extends MobRenderer<VoidBoar, PigModel<VoidBoar>> 
 
     public VoidBoarRenderer(EntityRendererProvider.Context context) {
         super(context, new PigModel<>(context.bakeLayer(ModelLayers.PIG)), 0.7F);
+        this.addLayer(new GlowLayer<VoidBoar, PigModel<VoidBoar>>(this, "void_boar"));
     }
 
     @Override

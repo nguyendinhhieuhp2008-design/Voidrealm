@@ -1,5 +1,8 @@
 package com.voidrealm.mod.entity;
 
+import com.voidrealm.mod.effect.Fx;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,5 +30,19 @@ public class RiftArcher extends Skeleton {
     @Override
     public boolean isSunBurnTick() {
         return false;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide) {
+            Fx.aura(this, ParticleTypes.SOUL_FIRE_FLAME, 9);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        Fx.deathBurst(this, ParticleTypes.SOUL_FIRE_FLAME);
     }
 }

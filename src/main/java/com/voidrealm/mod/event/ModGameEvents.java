@@ -2,7 +2,10 @@ package com.voidrealm.mod.event;
 
 import com.voidrealm.mod.Config;
 import com.voidrealm.mod.VoidRealm;
+import com.voidrealm.mod.effect.Fx;
 import com.voidrealm.mod.registry.ModArmorMaterials;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -21,18 +24,29 @@ public class ModGameEvents {
     @SubscribeEvent
     public static void onPlayerTick(PlayerTickEvent.Post event) {
         Player player = event.getEntity();
-        if (player.level().isClientSide || player.tickCount % 20 != 0 || !Config.ARMOR_SET_BONUS.get()) {
+        if (player.level().isClientSide || player.tickCount % 10 != 0 || !Config.ARMOR_SET_BONUS.get()) {
             return;
         }
+        boolean applyEffects = player.tickCount % 20 == 0;
 
         if (wearsFullSet(player, ModArmorMaterials.VOID_STEEL)) {
-            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 0, true, false, true));
-            player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 60, 0, true, false, true));
+            if (applyEffects) {
+                player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 60, 0, true, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 60, 0, true, false, true));
+            }
+            if (player.level() instanceof ServerLevel level) {
+                Fx.burst(level, player.getX(), player.getY() + 1.0D, player.getZ(), ParticleTypes.END_ROD, 2, 0.45D, 0.01D);
+            }
         }
 
         if (wearsFullSet(player, ModArmorMaterials.PHASE_CLOTH)) {
-            player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, true, false, true));
-            player.addEffect(new MobEffectInstance(MobEffects.JUMP, 60, 0, true, false, true));
+            if (applyEffects) {
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60, 0, true, false, true));
+                player.addEffect(new MobEffectInstance(MobEffects.JUMP, 60, 0, true, false, true));
+            }
+            if (player.level() instanceof ServerLevel level) {
+                Fx.burst(level, player.getX(), player.getY() + 0.9D, player.getZ(), ParticleTypes.REVERSE_PORTAL, 3, 0.4D, 0.02D);
+            }
         }
     }
 

@@ -1,5 +1,7 @@
 package com.voidrealm.mod.entity;
 
+import com.voidrealm.mod.effect.Fx;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -59,5 +61,19 @@ public class VoidBoar extends Monster {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.PIG_DEATH;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide) {
+            Fx.aura(this, ParticleTypes.ELECTRIC_SPARK, 7);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        Fx.deathBurst(this, ParticleTypes.ELECTRIC_SPARK);
     }
 }

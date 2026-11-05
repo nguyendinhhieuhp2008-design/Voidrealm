@@ -1,6 +1,7 @@
 package com.voidrealm.mod.item;
 
 import com.voidrealm.mod.Config;
+import com.voidrealm.mod.effect.Fx;
 import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -50,6 +51,9 @@ public class GravityStaffItem extends Item {
                 mob.setDeltaMovement(motion);
                 mob.hurtMarked = true;
                 mob.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 1), player);
+                if (level instanceof ServerLevel fxLevel) {
+                    Fx.burst(fxLevel, mob.getX(), mob.getY() + mob.getBbHeight() * 0.5D, mob.getZ(), ParticleTypes.REVERSE_PORTAL, 5, 0.3D, 0.1D);
+                }
             }
 
             if (level instanceof ServerLevel serverLevel) {
@@ -59,6 +63,10 @@ public class GravityStaffItem extends Item {
                             player.getX(), player.getY() + 1.0D, player.getZ(), count, radius / 3.0D, 0.8D, radius / 3.0D, 0.15D);
                 }
             }
+            if (level instanceof ServerLevel ringLevel) {
+                Fx.ring(ringLevel, player.getX(), player.getY() + 0.2D, player.getZ(), radius, ParticleTypes.END_ROD, 36, -0.35D);
+                Fx.ring(ringLevel, player.getX(), player.getY() + 1.0D, player.getZ(), radius * 0.6D, ParticleTypes.REVERSE_PORTAL, 24, -0.25D);
+            }
             level.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.ENDERMAN_STARE, SoundSource.PLAYERS, 0.8F, 1.4F);
             stack.hurtAndBreak(2, player, LivingEntity.getSlotForHand(hand));
@@ -66,6 +74,11 @@ public class GravityStaffItem extends Item {
 
         player.getCooldowns().addCooldown(this, Config.GRAVITY_COOLDOWN_TICKS.get());
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;
     }
 
     @Override

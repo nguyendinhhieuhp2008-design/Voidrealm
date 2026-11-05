@@ -21,6 +21,7 @@ public class VoidHumanoidRenderer<T extends Mob> extends HumanoidMobRenderer<T, 
         super(context, new HumanoidModel<>(context.bakeLayer(ModelLayers.ZOMBIE)), shadowRadius);
         this.texture = ResourceLocation.fromNamespaceAndPath(VoidRealm.MODID, "textures/entity/" + textureName + ".png");
         this.scale = scale;
+        this.addLayer(new GlowLayer<T, HumanoidModel<T>>(this, textureName));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.voidrealm.mod;
 
+import net.minecraft.util.RandomSource;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
 /**
@@ -43,6 +44,12 @@ public class Config {
     public static int particles(int base) {
         int percent = PARTICLE_PERCENT.get();
         return Math.max(0, base * percent / 100);
+    }
+
+    /** Xac suat ra hat: trung binh 1/oneIn moi lan goi, nhan voi ti le hat trong cau hinh. */
+    public static boolean roll(RandomSource random, int oneIn) {
+        int percent = PARTICLE_PERCENT.get();
+        return percent > 0 && random.nextInt(100) < percent && random.nextInt(Math.max(1, oneIn)) == 0;
     }
 
     private Config() {

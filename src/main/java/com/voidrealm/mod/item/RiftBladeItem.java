@@ -1,6 +1,7 @@
 package com.voidrealm.mod.item;
 
 import com.voidrealm.mod.Config;
+import com.voidrealm.mod.effect.Fx;
 import java.util.List;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -70,6 +71,8 @@ public class RiftBladeItem extends SwordItem {
                     serverLevel.sendParticles(ParticleTypes.PORTAL, from.x, from.y + 1.0D, from.z, count, 0.3D, 0.6D, 0.3D, 0.2D);
                     serverLevel.sendParticles(ParticleTypes.PORTAL, nx, ny + 1.0D, nz, count, 0.3D, 0.6D, 0.3D, 0.2D);
                 }
+                Fx.line(serverLevel, new Vec3(from.x, from.y + 1.0D, from.z), new Vec3(nx, ny + 1.0D, nz), ParticleTypes.END_ROD, 0.4D);
+                Fx.line(serverLevel, new Vec3(from.x, from.y + 0.5D, from.z), new Vec3(nx, ny + 0.5D, nz), ParticleTypes.REVERSE_PORTAL, 0.5D);
             }
             level.playSound(null, from.x, from.y, from.z, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0F, 1.2F);
             serverPlayer.connection.teleport(nx, ny, nz, serverPlayer.getYRot(), serverPlayer.getXRot());
@@ -80,6 +83,11 @@ public class RiftBladeItem extends SwordItem {
 
         player.getCooldowns().addCooldown(this, Config.BLINK_COOLDOWN_TICKS.get());
         return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return true;
     }
 
     @Override

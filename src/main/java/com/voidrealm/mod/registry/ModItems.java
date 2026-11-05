@@ -3,6 +3,7 @@ package com.voidrealm.mod.registry;
 import com.voidrealm.mod.VoidRealm;
 import com.voidrealm.mod.item.GravityStaffItem;
 import com.voidrealm.mod.item.RiftBladeItem;
+import com.voidrealm.mod.item.VoidPiercerItem;
 import com.voidrealm.mod.item.VoidReaperItem;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -90,7 +91,7 @@ public class ModItems {
                     .attributes(weaponAttributes(ModTiers.VOID_STEEL, 6.0F, -3.0F, 0.0D))));
 
     public static final DeferredHolder<Item, Item> VOIDPIERCER = ITEMS.register("voidpiercer",
-            () -> new SwordItem(ModTiers.VOID_STEEL, new Item.Properties().fireResistant().rarity(Rarity.RARE)
+            () -> new VoidPiercerItem(ModTiers.VOID_STEEL, new Item.Properties().fireResistant().rarity(Rarity.RARE)
                     .attributes(weaponAttributes(ModTiers.VOID_STEEL, 4.0F, -2.8F, 2.0D))));
 
     public static final DeferredHolder<Item, Item> GRAVITY_STAFF = ITEMS.register("gravity_staff",

@@ -1,6 +1,7 @@
 package com.voidrealm.mod.entity;
 
 import com.voidrealm.mod.Config;
+import com.voidrealm.mod.effect.Fx;
 import com.voidrealm.mod.registry.ModEntities;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -86,6 +87,8 @@ public class VoidSovereign extends Monster {
             this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, MobEffectInstance.INFINITE_DURATION, 0, false, false));
             serverLevel.playSound(null, this.getX(), this.getY(), this.getZ(),
                     SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 2.0F, 0.8F);
+            Fx.burst(serverLevel, this.getX(), this.getY() + 1.8D, this.getZ(), ParticleTypes.SOUL_FIRE_FLAME, 60, 1.2D, 0.15D);
+            Fx.ring(serverLevel, this.getX(), this.getY() + 0.3D, this.getZ(), 1.0D, ParticleTypes.END_ROD, 48, 0.7D);
         }
 
         if (this.getTarget() == null) {
@@ -124,6 +127,9 @@ public class VoidSovereign extends Monster {
             level.sendParticles(ParticleTypes.PORTAL, this.getX(), this.getY() + 1.0D, this.getZ(),
                     count, 4.0D, 1.0D, 4.0D, 0.5D);
         }
+        Fx.ring(level, this.getX(), this.getY() + 0.3D, this.getZ(), 1.5D, ParticleTypes.END_ROD, 40, 0.55D);
+        Fx.ring(level, this.getX(), this.getY() + 0.3D, this.getZ(), 1.5D, ParticleTypes.SOUL_FIRE_FLAME, 28, 0.4D);
+        Fx.ring(level, this.getX(), this.getY() + 1.4D, this.getZ(), 1.0D, ParticleTypes.REVERSE_PORTAL, 24, 0.3D);
         level.playSound(null, this.getX(), this.getY(), this.getZ(),
                 SoundEvents.ENDER_DRAGON_GROWL, SoundSource.HOSTILE, 1.5F, 1.2F);
     }
@@ -136,9 +142,39 @@ public class VoidSovereign extends Monster {
         for (int i = 0; i < 2; i++) {
             BlockPos pos = this.blockPosition().offset(this.random.nextInt(7) - 3, 0, this.random.nextInt(7) - 3);
             PhaseStalker minion = ModEntities.PHASE_STALKER.get().spawn(level, pos, MobSpawnType.MOB_SUMMONED);
+            Fx.burst(level, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, ParticleTypes.PORTAL, 20, 0.5D, 0.3D);
             if (minion != null && this.getTarget() != null) {
                 minion.setTarget(this.getTarget());
             }
+        }
+    }
+
+    // ------------------------------------------------------------ Hieu ung
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide) {
+            // hai vong hat xoay quanh than; khi nong gian co them lua hon
+            double angle = this.tickCount * 0.18D;
+            if (Config.roll(this.random, 1)) {
+                this.level().addParticle(ParticleTypes.REVERSE_PORTAL,
+                        this.getX() + Math.cos(angle) * 1.7D, this.getY() + 0.2D + (this.tickCount % 40) * 0.07D, this.getZ() + Math.sin(angle) * 1.7D,
+                        0.0D, 0.02D, 0.0D);
+                this.level().addParticle(ParticleTypes.REVERSE_PORTAL,
+                        this.getX() - Math.cos(angle) * 1.7D, this.getY() + 0.2D + ((this.tickCount + 20) % 40) * 0.07D, this.getZ() - Math.sin(angle) * 1.7D,
+                        0.0D, 0.02D, 0.0D);
+            }
+            Fx.aura(this, this.getHealth() < this.getMaxHealth() * 0.5F ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.ENCHANT, 3);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (this.level() instanceof ServerLevel level) {
+            Fx.burst(level, this.getX(), this.getY() + 1.8D, this.getZ(), ParticleTypes.END_ROD, 120, 1.5D, 0.25D);
+            Fx.ring(level, this.getX(), this.getY() + 0.3D, this.getZ(), 1.0D, ParticleTypes.SOUL_FIRE_FLAME, 60, 0.8D);
+            Fx.ring(level, this.getX(), this.getY() + 1.5D, this.getZ(), 1.0D, ParticleTypes.PORTAL, 60, 0.6D);
         }
     }
 

@@ -1,5 +1,7 @@
 package com.voidrealm.mod.entity;
 
+import com.voidrealm.mod.effect.Fx;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -81,5 +83,19 @@ public class RiftBrute extends Monster {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.IRON_GOLEM_DEATH;
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.level().isClientSide) {
+            Fx.aura(this, ParticleTypes.FLAME, 6);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        Fx.deathBurst(this, ParticleTypes.FLAME);
     }
 }
